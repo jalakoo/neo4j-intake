@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "neo4j-intake"
+version = "0.1.0"
+description = ""
+authors = ["Jason Koo <jalakoo@gmail.com>"]
+readme = "README.md"
+packages = [{include = "neo4j_intake"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+neo4j = "^5.14.0"
+pydantic = "^2.4.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
