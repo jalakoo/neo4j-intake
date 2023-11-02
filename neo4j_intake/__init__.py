@@ -1,4 +1,4 @@
-from neo4j_intake.database import db
+import neo4j_intake.database as db
 from neo4j_intake.models import Neo4jNode, Neo4jRelationship
 from pydantic import parse_obj_as
 import json
