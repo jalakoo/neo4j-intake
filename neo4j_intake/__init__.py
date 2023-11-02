@@ -1,4 +1,4 @@
-from neo4j_intake.database import get_nodes, create_nodes, create_relationships
+from neo4j_intake.database import db
 from neo4j_intake.models import Neo4jNode, Neo4jRelationship
 from pydantic import parse_obj_as
 import json
@@ -21,7 +21,7 @@ def get_nodes(creds: (str, str, str), node: dict | str) -> list[Neo4jNode]:
         node = json.loads(node)
         
     converted_nodes = parse_obj_as(Neo4jNode, node)
-    return get_nodes(creds, converted_nodes)
+    return db.get_nodes(creds, converted_nodes)
 
 def create_nodes(creds: (str, str, str), nodes: list[dict]) -> bool:
     """
@@ -40,7 +40,7 @@ def create_nodes(creds: (str, str, str), nodes: list[dict]) -> bool:
     if isinstance(nodes, str):
         nodes = json.loads(nodes)
     converted_nodes = parse_obj_as(list[Neo4jNode], nodes)
-    return create_nodes(creds, converted_nodes)
+    return db.create_nodes(creds, converted_nodes)
 
 
 def create_relationships(creds: (str, str, str), relationships: list[dict]) -> bool:
@@ -58,4 +58,4 @@ def create_relationships(creds: (str, str, str), relationships: list[dict]) -> b
         Exception if query fails
     """
     converted_nodes = parse_obj_as(list[Neo4jRelationship], relationships)
-    return create_relationships(creds, converted_nodes)
+    return db.create_relationships(creds, converted_nodes)

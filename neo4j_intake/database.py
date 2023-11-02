@@ -211,7 +211,7 @@ def create_neo4j_relationship_list_query(relationships: list[Neo4jRelationship])
 
 def create_relationships(
     creds: (str, str, str),
-    relationships: list[Neo4jRelationship],
+    relationships: list[Neo4jRelationship]
 ) -> bool:
     """
     Creates relationships in a target Neo4j database. NOTE that from and to nodes must already exist or no relationship will be created
