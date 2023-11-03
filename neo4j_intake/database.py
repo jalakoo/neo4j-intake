@@ -144,7 +144,7 @@ def get_nodes(
         node_data = result.data()['n']
         labels = result.data()['labels']
         if node_data is None:
-            print(f'node using an unknown variable: {result}')
+            ModuleLogger().error(f'node using an unknown variable: {result}')
             continue
         nodes.append(Neo4jNode(
             labels=labels,
@@ -228,9 +228,6 @@ def create_relationships(
     """
 
     query = create_neo4j_relationship_list_query(relationships)
-    
-    # Remove any trailing return
-    # query = query.rstrip("\n","", " ")
 
     ModuleLogger().info(f'query: {query}')
     records = execute_query(creds, query)
