@@ -4,7 +4,6 @@ from neo4j_intake.logger import ModuleLogger
 # TODO: Test connection
 
 def execute_query(creds: (str, str, str), query: str, params: dict={}):
-    print(f'creds: {creds}')
     host, user, password = creds
 
     # Returns a tuple of records, summary, keys
