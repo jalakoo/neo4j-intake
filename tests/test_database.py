@@ -166,3 +166,18 @@ class TestCreateRelationships():
         query = create_neo4j_relationship_list_query(relationships)
 
         assert expected == query
+
+    def test_create_neo4j_relationship_list_query_dedupe(self):
+        # Define nodes and relationships
+        start_node1 = Neo4jNode(labels=["Person"], properties={"name":"Alice"})
+        end_node1 = Neo4jNode(labels=["City"], properties={"name":"London"})
+        rel1 = Neo4jRelationship(from_node=start_node1, to_node=end_node1, type="LIVES_IN")
+        
+        relationships = [rel1, rel1]
+
+        # Expected query string
+        expected = """MATCH (sn0:Person { name: "Alice" })\nOPTIONAL MATCH (tn0:City { name: "London" })\nCREATE (sn0)-[:LIVES_IN]->(tn0)"""
+
+        query = create_neo4j_relationship_list_query(relationships, dedupe=True)
+
+        assert expected == query
