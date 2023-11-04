@@ -43,13 +43,14 @@ def create_nodes(creds: (str, str, str), nodes: list[dict]) -> bool:
     return db.create_nodes(creds, converted_nodes)
 
 
-def create_relationships(creds: (str, str, str), relationships: list[dict]) -> bool:
+def create_relationships(creds: (str, str, str), relationships: list[dict], dedupe: bool = False) -> bool:
     """
     Creates Relationships to a target Neo4j database
 
     Arguments:
         creds: tuple of (uri, username, password) for target database
         relationships: list of dictionaries or stringified .json representation of a list of Neo4jRelationships objects. Note that these must also contain Neo4jNode objects for specifying from and to nodes.
+        dedupe: Bool to dedupe relationships if they already exist.
 
     Returns:
         Bool if query successfully ran.
@@ -58,4 +59,4 @@ def create_relationships(creds: (str, str, str), relationships: list[dict]) -> b
         Exception if query fails
     """
     converted_nodes = parse_obj_as(list[Neo4jRelationship], relationships)
-    return db.create_relationships(creds, converted_nodes)
+    return db.create_relationships(creds, converted_nodes, dedupe=dedupe)

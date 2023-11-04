@@ -83,6 +83,7 @@ def create_neo4j_nodes_list_query(nodes: list[Neo4jNode]) -> str:
     Returns:
         String containing multi-line Cypher query
     """
+
     result = ""
     for idx, node in enumerate(nodes):
         if idx > 0:
@@ -186,16 +187,20 @@ def create_neo4j_relationship_query(relationship: Neo4jRelationship, index=0) ->
 
     return match, create
 
-def create_neo4j_relationship_list_query(relationships: list[Neo4jRelationship]) -> str:
+def create_neo4j_relationship_list_query(relationships: list[Neo4jRelationship], dedupe: bool = False) -> str:
     """
     Generates a multi-line Cypher query string to create multiple relationships in a Neo4j database
     
     Args:
         relationships: List of Neo4jRelationship objects
+        dedupe: Bool to indicate if duplicate relationships should be removed
 
     Returns:
         String containing multi-line Cypher query
     """
+    if dedupe == True:
+        relationships = list(set(relationships))
+        
     matches = ""
     creates = ""
     for idx, element in enumerate(relationships):
@@ -211,7 +216,8 @@ def create_neo4j_relationship_list_query(relationships: list[Neo4jRelationship])
 
 def create_relationships(
     creds: (str, str, str),
-    relationships: list[Neo4jRelationship]
+    relationships: list[Neo4jRelationship],
+    dedupe : bool = False
 ) -> bool:
     """
     Creates relationships in a target Neo4j database. NOTE that from and to nodes must already exist or no relationship will be created
@@ -219,6 +225,7 @@ def create_relationships(
     Args:
         creds: (str, str, str) - (neo4j_uri, neo4j_user, neo4j_password)
         relationships: list[Neo4jRelationship] - list of relationships to create
+        dedupe : Bool - if True, will dedupe relationships based on type and properties.
 
     Returns:
         Bool indicating success or failure.
@@ -227,7 +234,7 @@ def create_relationships(
         Exception if query fails
     """
 
-    query = create_neo4j_relationship_list_query(relationships)
+    query = create_neo4j_relationship_list_query(relationships, dedupe)
 
     ModuleLogger().info(f'query: {query}')
     records = execute_query(creds, query)
